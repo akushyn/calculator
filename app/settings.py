@@ -5,7 +5,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-
     logging_handlers: list[str] = ["console"]
     logging_level: str = "DEBUG"
 
