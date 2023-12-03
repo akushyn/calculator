@@ -13,9 +13,10 @@ from app.core.operators import AddOperator, SubOperator, MulOperator, DivOperato
         (6, 2, 8),
     ],
 )
-def test_add_operator(x, y, expected):
+@pytest.mark.asyncio
+async def test_add_operator(x, y, expected):
     operator = AddOperator()
-    result = operator.perform(x, y)
+    result = await operator.perform(x, y)
     assert result == expected
 
 
@@ -29,9 +30,10 @@ def test_add_operator(x, y, expected):
         (6, 2, 4),
     ],
 )
-def test_sub_operator(x, y, expected):
+@pytest.mark.asyncio
+async def test_sub_operator(x, y, expected):
     operator = SubOperator()
-    result = operator.perform(x, y)
+    result = await operator.perform(x, y)
     assert result == expected
 
 
@@ -45,9 +47,9 @@ def test_sub_operator(x, y, expected):
         (6, -2, -12),
     ],
 )
-def test_mul_operator(x, y, expected):
+async def test_mul_operator(x, y, expected):
     operator = MulOperator()
-    result = operator.perform(x, y)
+    result = await operator.perform(x, y)
     assert result == expected
 
 
@@ -60,9 +62,9 @@ def test_mul_operator(x, y, expected):
         (-1, 2, -0.5),
     ],
 )
-def test_div_operator(x, y, expected):
+async def test_div_operator(x, y, expected):
     operator = DivOperator()
-    result = operator.perform(x, y)
+    result = await operator.perform(x, y)
     assert result == expected
 
 
@@ -74,10 +76,10 @@ def test_div_operator(x, y, expected):
         (0, 0),
     ],
 )
-def test_div_by_zero(x, y):
+async def test_div_by_zero(x, y):
     operator = DivOperator()
     with pytest.raises(ValueError) as exc_info:
-        operator.perform(x, y)
+        await operator.perform(x, y)
 
     assert exc_info.type is ValueError
     assert str(exc_info.value) == "Division by zero"
