@@ -37,8 +37,8 @@ class ExpressionAnalyzer:
             if not await is_operator(op=token):
                 continue
 
+            # use operator priority property to find the lowest priority and the lowest priority index
             operator = await get_operator(op=token)
-
             if operator.priority < lowest_priority:
                 lowest_priority = operator.priority
                 lowest_priority_idx = i
@@ -47,6 +47,7 @@ class ExpressionAnalyzer:
         if lowest_priority_idx == -1:
             return Node(tokens[0])
 
+        # recursively build left and right parts of tree nodes
         root = Node(tokens[lowest_priority_idx])
         root.left_operand = await self.build_tree(tokens[:lowest_priority_idx])
         root.right_operand = await self.build_tree(tokens[lowest_priority_idx + 1 :])
@@ -57,12 +58,14 @@ class ExpressionAnalyzer:
         if root is None:
             return 0
 
-        if root.value.isdigit() or (root.value[0] == "-" and root.value[1:].isdigit()):
+        # reached leaves of the tree, it's always a number
+        if root.value.isdigit():
             return float(root.value)
 
         left_val = await self.evaluate_tree(root.left_operand)
         right_val = await self.evaluate_tree(root.right_operand)
 
+        # get appropriate operator and perform operation
         operator = await get_operator(op=root.value)
         return await operator.perform(x=left_val, y=right_val)
 
