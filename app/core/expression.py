@@ -1,6 +1,9 @@
+import logging
 import re
 
 from app.core.operators import get_operator, get_operators_keys, is_operator
+
+logger = logging.getLogger(__name__)
 
 
 class Node:
@@ -24,6 +27,8 @@ class Node:
 
 class ExpressionAnalyzer:
     async def build_tree(self, tokens) -> Node | None:
+        logger.info(f"Build tree tokens: {tokens}")
+
         if not tokens:
             return None
 
@@ -56,6 +61,7 @@ class ExpressionAnalyzer:
         return root
 
     async def evaluate_tree(self, root) -> float:
+        logger.info(f"Evaluate tree: {root.__repr__()}")
         if root is None:
             return 0
 
@@ -71,10 +77,12 @@ class ExpressionAnalyzer:
         return await operator.perform(x=left_val, y=right_val)
 
     async def calculate(self, expression: str):
+        logger.info("Start calculate")
         tokens = await tokenize(expression)
         root = await self.build_tree(tokens)
         result = await self.evaluate_tree(root)
 
+        logger.info("Done calculate")
         return result
 
 
@@ -83,6 +91,7 @@ async def _clean(expression: str) -> str:
 
 
 async def tokenize(expression: str) -> list[str]:
+    logger.info(f"Tokenize expression: {expression}")
     expression = await _clean(expression)
     operators = "|".join(re.escape(op) for op in await get_operators_keys())
     tokens = re.findall(r"\d+|" + operators, expression)

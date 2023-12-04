@@ -1,4 +1,7 @@
+import logging
 from abc import ABC, abstractmethod
+
+logger = logging.getLogger(__name__)
 
 
 class AbstractOperator(ABC):
@@ -14,6 +17,7 @@ class AbstractOperator(ABC):
 
 class AddOperator(AbstractOperator):
     async def perform(self, x: float, y: float) -> float:
+        logger.info(f"Perform add operator: {x}, {y}")
         return x + y
 
     @property
@@ -23,6 +27,7 @@ class AddOperator(AbstractOperator):
 
 class SubOperator(AbstractOperator):
     async def perform(self, x: float, y: float) -> float:
+        logger.info(f"Perform sub operator: {x}, {y}")
         return x - y
 
     @property
@@ -32,6 +37,7 @@ class SubOperator(AbstractOperator):
 
 class MulOperator(AbstractOperator):
     async def perform(self, x: float, y: float) -> float:
+        logger.info(f"Perform mul operator: {x}, {y}")
         return x * y
 
     @property
@@ -41,6 +47,7 @@ class MulOperator(AbstractOperator):
 
 class DivOperator(AbstractOperator):
     async def perform(self, x: float, y: float) -> float:
+        logger.info(f"Perform div operator: {x}, {y}")
         if y == 0:
             raise ValueError("Division by zero")
 
