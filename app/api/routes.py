@@ -7,4 +7,4 @@ router = APIRouter()
 
 @router.get("/operators", response_model=list[str])
 async def operators() -> list[str]:
-    return get_operators_keys()
+    return await get_operators_keys()

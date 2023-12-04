@@ -1,6 +1,14 @@
 import pytest
 
-from app.core.operators import AddOperator, SubOperator, MulOperator, DivOperator
+from app.core.operators import (
+    AddOperator,
+    SubOperator,
+    MulOperator,
+    DivOperator,
+    get_operators_keys,
+    is_operator,
+    get_operator,
+)
 
 
 @pytest.mark.parametrize(
@@ -47,6 +55,7 @@ async def test_sub_operator(x, y, expected):
         (6, -2, -12),
     ],
 )
+@pytest.mark.asyncio
 async def test_mul_operator(x, y, expected):
     operator = MulOperator()
     result = await operator.perform(x, y)
@@ -62,6 +71,7 @@ async def test_mul_operator(x, y, expected):
         (-1, 2, -0.5),
     ],
 )
+@pytest.mark.asyncio
 async def test_div_operator(x, y, expected):
     operator = DivOperator()
     result = await operator.perform(x, y)
@@ -76,6 +86,7 @@ async def test_div_operator(x, y, expected):
         (0, 0),
     ],
 )
+@pytest.mark.asyncio
 async def test_div_by_zero(x, y):
     operator = DivOperator()
     with pytest.raises(ValueError) as exc_info:
@@ -83,3 +94,54 @@ async def test_div_by_zero(x, y):
 
     assert exc_info.type is ValueError
     assert str(exc_info.value) == "Division by zero"
+
+
+@pytest.mark.asyncio
+async def test_get_operators_keys():
+    keys = await get_operators_keys()
+    assert keys == ["+", "-", "*", "/"]
+
+
+@pytest.mark.parametrize(
+    "op, expected",
+    [
+        ("+", True),
+        ("-", True),
+        ("*", True),
+        ("/", True),
+        (" ", False),
+        ("1", False),
+    ],
+)
+@pytest.mark.asyncio
+async def test_is_operator(op, expected):
+    result = await is_operator(op)
+    assert result is expected
+
+
+@pytest.mark.parametrize(
+    "op, operator_class",
+    [
+        ("+", AddOperator),
+        ("-", SubOperator),
+        ("*", MulOperator),
+        ("/", DivOperator),
+    ],
+)
+@pytest.mark.asyncio
+async def test_get_operator(op, operator_class):
+    operator = await get_operator(op)
+    assert isinstance(operator, operator_class)
+
+
+@pytest.mark.asyncio
+async def test_operator_not_implemented():
+    not_implemented_operator = "^"
+    with pytest.raises(NotImplementedError) as exc_info:
+        await get_operator(not_implemented_operator)
+
+    assert exc_info.type is NotImplementedError
+    assert (
+        str(exc_info.value)
+        == "Operator ^ does not support. Supported operators: ['+', '-', '*', '/']"
+    )

@@ -35,10 +35,10 @@ class ExpressionAnalyzer:
         for i in range(len(tokens) - 1, -1, -1):
             token = tokens[i]
 
-            if not is_operator(op=token):
+            if not await is_operator(op=token):
                 continue
 
-            operator = get_operator(op=token)
+            operator = await get_operator(op=token)
 
             if operator.priority <= lowest_priority:
                 lowest_priority = operator.priority
@@ -64,7 +64,7 @@ class ExpressionAnalyzer:
         left_val = await self.evaluate_tree(root.left_operand)
         right_val = await self.evaluate_tree(root.right_operand)
 
-        operator = get_operator(op=root.value)
+        operator = await get_operator(op=root.value)
         return await operator.perform(x=left_val, y=right_val)
 
     async def calculate(self, expression: str):
@@ -81,7 +81,7 @@ async def _clean(expression: str) -> str:
 
 async def _tokenize(expression: str) -> list[str]:
     expression = await _clean(expression)
-    operators = "|".join(re.escape(op) for op in get_operators_keys())
+    operators = "|".join(re.escape(op) for op in await get_operators_keys())
     tokens = re.findall(r"\d+|" + operators, expression)
     return tokens
 

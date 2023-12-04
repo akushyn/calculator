@@ -59,17 +59,17 @@ OPERATORS = {
 }
 
 
-def is_operator(op: str):
-    return op in get_operators_keys()
+async def is_operator(op: str):
+    return op in await get_operators_keys()
 
 
-def get_operator(op: str) -> AbstractOperator:
-    if not is_operator(op):
+async def get_operator(op: str) -> AbstractOperator:
+    if not await is_operator(op):
         raise NotImplementedError(
-            f"Operator {op} does not support. Supported operators: {get_operators_keys()}"
+            f"Operator {op} does not support. Supported operators: {await get_operators_keys()}"
         )
     return OPERATORS[op]()  # type: ignore
 
 
-def get_operators_keys() -> list[str]:
+async def get_operators_keys() -> list[str]:
     return list(OPERATORS.keys())
