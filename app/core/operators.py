@@ -66,7 +66,8 @@ async def is_operator(op: str):
 async def get_operator(op: str) -> AbstractOperator:
     if not await is_operator(op):
         raise NotImplementedError(
-            f"Operator {op} does not support. Supported operators: {await get_operators_keys()}"
+            f"Operator {op} does not support. Supported operators: "
+            f"{await get_operators_keys()}"
         )
     return OPERATORS[op]()  # type: ignore
 

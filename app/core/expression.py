@@ -1,6 +1,6 @@
 import re
 
-from app.core.operators import get_operators_keys, get_operator, is_operator
+from app.core.operators import get_operator, get_operators_keys, is_operator
 
 
 class Node:
@@ -37,7 +37,8 @@ class ExpressionAnalyzer:
             if not await is_operator(op=token):
                 continue
 
-            # use operator priority property to find the lowest priority and the lowest priority index
+            # use operator priority property
+            # to find the lowest priority and the lowest priority index
             operator = await get_operator(op=token)
             if operator.priority < lowest_priority:
                 lowest_priority = operator.priority

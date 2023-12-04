@@ -2,12 +2,12 @@ import pytest
 
 from app.core.operators import (
     AddOperator,
-    SubOperator,
-    MulOperator,
     DivOperator,
+    MulOperator,
+    SubOperator,
+    get_operator,
     get_operators_keys,
     is_operator,
-    get_operator,
 )
 
 

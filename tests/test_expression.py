@@ -1,5 +1,6 @@
 import pytest
-from app.core.expression import ExpressionAnalyzer, Node, tokenize, _clean
+
+from app.core.expression import ExpressionAnalyzer, Node, _clean, tokenize
 
 
 @pytest.fixture

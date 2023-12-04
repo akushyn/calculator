@@ -1,6 +1,7 @@
 import pytest
-from app.main import create_app
 from starlette.testclient import TestClient
+
+from app.main import create_app
 
 
 @pytest.fixture(autouse=True)
