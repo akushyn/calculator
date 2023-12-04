@@ -1,6 +1,7 @@
 import logging
 import re
 
+from app.core.colorizer import DefaultColorizer
 from app.core.operators import get_operator, get_operators_keys, is_operator
 
 logger = logging.getLogger(__name__)
@@ -26,6 +27,16 @@ class Node:
 
 
 class ExpressionAnalyzer:
+    colorizer = DefaultColorizer
+
+    def get_colorizer_class(self):
+        return self.colorizer
+
+    def get_colorizer(self):
+        if not self.colorizer:
+            raise ValueError("Colorizer class is not set")
+        return self.colorizer()
+
     async def build_tree(self, tokens) -> Node | None:
         logger.info(f"Build tree tokens: {tokens}")
 
