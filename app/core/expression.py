@@ -1,4 +1,3 @@
-import asyncio
 import re
 
 from app.core.operators import get_operators_keys, get_operator, is_operator
@@ -40,7 +39,7 @@ class ExpressionAnalyzer:
 
             operator = await get_operator(op=token)
 
-            if operator.priority <= lowest_priority:
+            if operator.priority < lowest_priority:
                 lowest_priority = operator.priority
                 lowest_priority_idx = i
 
@@ -68,7 +67,7 @@ class ExpressionAnalyzer:
         return await operator.perform(x=left_val, y=right_val)
 
     async def calculate(self, expression: str):
-        tokens = await _tokenize(expression)
+        tokens = await tokenize(expression)
         root = await self.build_tree(tokens)
         result = await self.evaluate_tree(root)
 
@@ -79,20 +78,8 @@ async def _clean(expression: str) -> str:
     return expression.replace(" ", "")
 
 
-async def _tokenize(expression: str) -> list[str]:
+async def tokenize(expression: str) -> list[str]:
     expression = await _clean(expression)
     operators = "|".join(re.escape(op) for op in await get_operators_keys())
     tokens = re.findall(r"\d+|" + operators, expression)
     return tokens
-
-
-async def main():
-    equation = "10 + 18 - 12 / 3 + 7 * 3"
-
-    analyzer = ExpressionAnalyzer()
-    result = await analyzer.calculate(expression=equation)
-    print(result)
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
