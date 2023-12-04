@@ -6,20 +6,37 @@ class AbstractOperator(ABC):
     async def perform(self, x: float, y: float) -> float:
         pass
 
+    @property
+    @abstractmethod
+    def priority(self) -> int:
+        pass
+
 
 class AddOperator(AbstractOperator):
     async def perform(self, x: float, y: float) -> float:
         return x + y
+
+    @property
+    def priority(self) -> int:
+        return 1
 
 
 class SubOperator(AbstractOperator):
     async def perform(self, x: float, y: float) -> float:
         return x - y
 
+    @property
+    def priority(self) -> int:
+        return 1
+
 
 class MulOperator(AbstractOperator):
     async def perform(self, x: float, y: float) -> float:
         return x * y
+
+    @property
+    def priority(self) -> int:
+        return 2
 
 
 class DivOperator(AbstractOperator):
@@ -29,6 +46,10 @@ class DivOperator(AbstractOperator):
 
         return x / y
 
+    @property
+    def priority(self) -> int:
+        return 2
+
 
 OPERATORS = {
     "+": AddOperator,
@@ -36,3 +57,19 @@ OPERATORS = {
     "*": MulOperator,
     "/": DivOperator,
 }
+
+
+def is_operator(op: str):
+    return op in get_operators_keys()
+
+
+def get_operator(op: str) -> AbstractOperator:
+    if not is_operator(op):
+        raise NotImplementedError(
+            f"Operator {op} does not support. Supported operators: {get_operators_keys()}"
+        )
+    return OPERATORS[op]()  # type: ignore
+
+
+def get_operators_keys() -> list[str]:
+    return list(OPERATORS.keys())
