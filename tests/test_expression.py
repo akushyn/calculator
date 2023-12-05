@@ -96,6 +96,7 @@ async def test_clean(expression):
         ("1", True),
         ("1.0", True),
         ("-1.0", True),
+        ("1.23.45", False),
     ],
 )
 def test_is_numeric(value, expected):
