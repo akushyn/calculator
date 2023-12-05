@@ -15,3 +15,18 @@ services:
       NO_DOT_ENV: 1
       UVICORN_HOST: "0.0.0.0"
       UVICORN_PORT: 8000
+
+  web_app:
+    build:
+      context: ./web_app
+    volumes:
+      - ./web_app:/app
+    ports:
+      - "8501:8501"
+    depends_on:
+      app:
+        condition: service_started
+    environment:
+      BACKEND_URL: http://app:8000/api
+      STREAMLIT_SERVER_ADDRESS: ${STREAMLIT_SERVER_ADDRESS:-0.0.0.0}
+      STREAMLIT_PORT: ${STREAMLIT_PORT:-8501}
