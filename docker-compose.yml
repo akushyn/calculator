@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: uvicorn app.main:app --host ${UVICORN_HOST:-0.0.0.0} --port ${UVICORN_PORT:-8000}
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      NO_DOT_ENV: 1
+      UVICORN_HOST: ${UVICORN_HOST:-0.0.0.0}
+      UVICORN_PORT: ${UVICORN_PORT:-8000}
+
+  web_app:
+    build:
+      context: ./web_app
+    volumes:
+      - ./web_app:/app
+    ports:
+      - "8501:8501"
+    depends_on:
+      app:
+        condition: service_started
+    environment:
+      BACKEND_URL: http://app:8000/api
+      STREAMLIT_SERVER_ADDRESS: ${STREAMLIT_SERVER_ADDRESS:-0.0.0.0}
+      STREAMLIT_PORT: ${STREAMLIT_PORT:-8501}

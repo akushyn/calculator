@@ -1,0 +1,10 @@
+fastapi
+httpx
+pydantic
+pydantic_settings
+pytest
+pytest-cov
+pytest-xdist
+pytest-asyncio
+pytest-mock
+uvicorn[standard]
