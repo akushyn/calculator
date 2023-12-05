@@ -56,7 +56,8 @@ def calculate(expression: str, colorize: bool = False):
         logger.error(
             f"HTTP Error: {str(error)}",
         )
-        st.error("Calculation failed.")
+        error_detail = error.response.json().get("detail", str(error.args))
+        st.error(f"Calculation failed. {error_detail}")
 
 
 logger = configure_logger()
@@ -86,15 +87,16 @@ def main():
 
         if st.button("Calculate"):
             result = calculate(expression)
-            result_value = result["result"]
-            result_color = result.get("color")
+            if result:
+                result_value = result["result"]
+                result_color = result.get("color")
 
-            # display result with colored background
-            st.markdown(
-                f"<div style='background-color: {result_color}; padding: 10px;'>"
-                f"Result: {result_value}</div>",
-                unsafe_allow_html=True,
-            )
+                # display result with colored background
+                st.markdown(
+                    f"<div style='background-color: {result_color}; padding: 10px;'>"
+                    f"Result: {result_value}</div>",
+                    unsafe_allow_html=True,
+                )
 
     logger.info("End rerun")
 

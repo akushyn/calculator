@@ -1,6 +1,8 @@
 import logging
 from abc import ABC, abstractmethod
 
+from app.exceptions import CalculateException
+
 logger = logging.getLogger(__name__)
 
 
@@ -50,7 +52,7 @@ class MulOperator(AbstractOperator):
 class DivOperator(AbstractOperator):
     async def _perform_operation(self, x: float, y: float) -> float:
         if y == 0:
-            raise ValueError("Division by zero")
+            raise CalculateException("Division by zero")
 
         return x / y
 

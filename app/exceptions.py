@@ -1,0 +1,2 @@
+class CalculateException(Exception):
+    pass
