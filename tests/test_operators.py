@@ -24,7 +24,7 @@ from app.core.operators import (
 @pytest.mark.asyncio
 async def test_add_operator(x, y, expected):
     operator = AddOperator()
-    result = await operator.perform(x, y)
+    result = await operator._perform_operation(x, y)
     assert result == expected
 
 
@@ -41,7 +41,7 @@ async def test_add_operator(x, y, expected):
 @pytest.mark.asyncio
 async def test_sub_operator(x, y, expected):
     operator = SubOperator()
-    result = await operator.perform(x, y)
+    result = await operator._perform_operation(x, y)
     assert result == expected
 
 
@@ -58,7 +58,7 @@ async def test_sub_operator(x, y, expected):
 @pytest.mark.asyncio
 async def test_mul_operator(x, y, expected):
     operator = MulOperator()
-    result = await operator.perform(x, y)
+    result = await operator._perform_operation(x, y)
     assert result == expected
 
 
@@ -74,7 +74,7 @@ async def test_mul_operator(x, y, expected):
 @pytest.mark.asyncio
 async def test_div_operator(x, y, expected):
     operator = DivOperator()
-    result = await operator.perform(x, y)
+    result = await operator._perform_operation(x, y)
     assert result == expected
 
 
@@ -90,7 +90,7 @@ async def test_div_operator(x, y, expected):
 async def test_div_by_zero(x, y):
     operator = DivOperator()
     with pytest.raises(ValueError) as exc_info:
-        await operator.perform(x, y)
+        await operator._perform_operation(x, y)
 
     assert exc_info.type is ValueError
     assert str(exc_info.value) == "Division by zero"

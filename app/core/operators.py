@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 class AbstractOperator(ABC):
     @abstractmethod
-    async def perform(self, x: float, y: float) -> float:
+    async def _perform_operation(self, x: float, y: float) -> float:
         pass
 
     @property
@@ -14,10 +14,14 @@ class AbstractOperator(ABC):
     def priority(self) -> int:
         pass
 
+    async def perform(self, x: float, y: float) -> float:
+        result = await self._perform_operation(x, y)
+        logger.info(f"Perform {self.__class__.__name__}: {x}, {y}. Result={result}")
+        return result
+
 
 class AddOperator(AbstractOperator):
-    async def perform(self, x: float, y: float) -> float:
-        logger.info(f"Perform add operator: {x}, {y}")
+    async def _perform_operation(self, x: float, y: float) -> float:
         return x + y
 
     @property
@@ -26,8 +30,7 @@ class AddOperator(AbstractOperator):
 
 
 class SubOperator(AbstractOperator):
-    async def perform(self, x: float, y: float) -> float:
-        logger.info(f"Perform sub operator: {x}, {y}")
+    async def _perform_operation(self, x: float, y: float) -> float:
         return x - y
 
     @property
@@ -36,8 +39,7 @@ class SubOperator(AbstractOperator):
 
 
 class MulOperator(AbstractOperator):
-    async def perform(self, x: float, y: float) -> float:
-        logger.info(f"Perform mul operator: {x}, {y}")
+    async def _perform_operation(self, x: float, y: float) -> float:
         return x * y
 
     @property
@@ -46,8 +48,7 @@ class MulOperator(AbstractOperator):
 
 
 class DivOperator(AbstractOperator):
-    async def perform(self, x: float, y: float) -> float:
-        logger.info(f"Perform div operator: {x}, {y}")
+    async def _perform_operation(self, x: float, y: float) -> float:
         if y == 0:
             raise ValueError("Division by zero")
 
