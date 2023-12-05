@@ -102,7 +102,7 @@ test-real: venv
 
 .PHONY: run
 run: venv
-	$(PYTHON) manage.py runserver
+	$(VENV_BIN)/uvicorn $(PACKAGE).main:app --reload
 
 .PHONY: clean
 clean:
