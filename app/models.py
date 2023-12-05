@@ -8,4 +8,7 @@ class CalculateRequest(BaseModel):
 
 class CalculateResponse(BaseModel):
     result: float
+
+
+class ColorizeCalculateResponse(CalculateResponse):
     color: str | None = None
