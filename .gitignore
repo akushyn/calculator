@@ -129,6 +129,7 @@ env.bak/
 venv.bak/
 venv.pre-commit
 venv.lint
+venv.web_app
 
 # Spyder project settings
 .spyderproject
