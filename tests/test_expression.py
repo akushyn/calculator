@@ -1,6 +1,6 @@
 import pytest
 
-from app.core.expression import ExpressionAnalyzer, Node, _clean, tokenize
+from app.core.expression import ExpressionAnalyzer, Node, _clean, _is_numeric, tokenize
 
 
 @pytest.fixture
@@ -61,11 +61,13 @@ async def test_evaluate_tree(analyzer):
     [
         ("0+0", 0.0),
         ("2+3", 5.0),
+        ("-2-3", -5.0),
         ("1-2+3", 2.0),
         ("1-2-3", -4.0),
         ("-1-2", -3.0),
         ("2+3*4", 14.0),
         ("2*3+4", 10.0),
+        ("4.0+7.0", 11.0),
         ("1 + 2 - 10 / 4 + 7 * 4", 28.5),
     ],
 )
@@ -85,3 +87,17 @@ async def test_tokenize(expression):
 async def test_clean(expression):
     clean_expression = await _clean(expression)
     assert clean_expression == "2+3"
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("+", False),
+        ("1", True),
+        ("1.0", True),
+        ("-1.0", True),
+    ],
+)
+def test_is_numeric(value, expected):
+    actual = _is_numeric(value)
+    assert actual is expected

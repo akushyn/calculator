@@ -77,7 +77,7 @@ class ExpressionAnalyzer:
             return 0
 
         # reached leaves of the tree, it's always a number
-        if root.value.isdigit():
+        if _is_numeric(root.value):
             return float(root.value)
 
         left_val = await self.evaluate_tree(root.left_operand)
@@ -101,9 +101,17 @@ async def _clean(expression: str) -> str:
     return expression.replace(" ", "")
 
 
+def _is_numeric(s: str) -> bool:
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
+
 async def tokenize(expression: str) -> list[str]:
     logger.info(f"Tokenize expression: {expression}")
     expression = await _clean(expression)
     operators = "|".join(re.escape(op) for op in await get_operators_keys())
-    tokens = re.findall(r"\d+|" + operators, expression)
+    tokens = re.findall(r"\d*\.\d+|\d+|" + operators, expression)
     return tokens
