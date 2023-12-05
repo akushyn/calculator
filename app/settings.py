@@ -5,8 +5,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    calculate_even_color: str = "green"
-    calculate_odd_color: str = "red"
+    default_even_color: str = "green"
+    default_odd_color: str = "red"
 
     logging_handlers: list[str] = ["console"]
     logging_level: str = "DEBUG"

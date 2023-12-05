@@ -13,7 +13,7 @@ class DefaultColorizer(ColorMixin):
 class CalculateColorizer(DefaultColorizer):
     async def get_color(self, value: float) -> str | None:
         if value % 2 == 0:
-            color = settings.calculate_even_color
+            color = settings.default_even_color
         else:
-            color = settings.calculate_odd_color
+            color = settings.default_odd_color
         return color
