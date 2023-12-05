@@ -9,6 +9,7 @@ from app.core.operators import (
     get_operators_keys,
     is_operator,
 )
+from app.exceptions import CalculateException
 
 
 @pytest.mark.parametrize(
@@ -89,10 +90,10 @@ async def test_div_operator(x, y, expected):
 @pytest.mark.asyncio
 async def test_div_by_zero(x, y):
     operator = DivOperator()
-    with pytest.raises(ValueError) as exc_info:
+    with pytest.raises(CalculateException) as exc_info:
         await operator._perform_operation(x, y)
 
-    assert exc_info.type is ValueError
+    assert exc_info.type is CalculateException
     assert str(exc_info.value) == "Division by zero"
 
 
