@@ -33,8 +33,8 @@ class ExpressionAnalyzer:
         return self.colorizer
 
     def get_colorizer(self):
-        if not self.colorizer:
-            raise ValueError("Colorizer class is not set")
+        if not self.get_colorizer_class():
+            return None
         return self.colorizer()
 
     async def build_tree(self, tokens) -> Node | None:
@@ -95,6 +95,11 @@ class ExpressionAnalyzer:
 
         logger.info("Done calculate")
         return result
+
+    async def get_color(self, value: float) -> str | None:
+        if not self.get_colorizer():
+            return None
+        return await self.get_colorizer().get_color(value)
 
 
 async def _clean(expression: str) -> str:

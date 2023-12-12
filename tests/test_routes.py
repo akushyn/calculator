@@ -23,4 +23,4 @@ async def test_calculate(client, calculate_request):
     response = client.post("/api/calculate/", json=calculate_request.model_dump())
 
     assert response.status_code == 200
-    assert response.json() == {"result": 5.0}
+    assert response.json() == {"result": 5.0, "color": None}
